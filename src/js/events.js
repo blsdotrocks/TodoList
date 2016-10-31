@@ -7,6 +7,7 @@ export function registerEventHandlers() {
         let key = event.which || event.keyCode;
         if (key == '13') {
             todos.dispatch(addTodo(todoInput.value));
+            todoInput.focus();
             return false;
         }
     });
