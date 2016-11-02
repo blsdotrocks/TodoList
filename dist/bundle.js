@@ -9550,7 +9550,7 @@
 	function renderApp(input, todoList) {
 	    if ((0, _feature.isEnabled)('renderBottom')) {
 	        return renderAddTodoAtBottom(input, todoList);
-	    }if ((0, _feature.isEnabled)('filter')) {
+	    } else if ((0, _feature.isEnabled)('filter')) {
 	        return renderAddFilter(input, todoList);
 	    } else {
 	        return renderAddTodoAtTop(input, todoList);
