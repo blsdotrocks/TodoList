@@ -11,6 +11,8 @@ export function render(el, state) {
 function renderApp(input, todoList) {
     if(isEnabled('renderBottom')) {
         return renderAddTodoAtBottom(input, todoList);
+    } if(isEnabled('filter')) {
+        return renderAddFilter(input, todoList);
     } else {
         return renderAddTodoAtTop(input, todoList);
     }
@@ -44,4 +46,21 @@ function renderTodoItem(todo) {
         <input class="js_toggle_todo" type="checkbox" data-id="${todo.id}"${todo.done ? ' checked' : ''}>
         ${todo.text}
     </li>`;
+}
+
+function renderAddFilter(input, todoList) {
+    return `<div id="app">
+        ${todoList}
+        <form>
+            <label>
+                <input id="all" type="radio" name="filter" value="all" checked>Todos
+            </label>
+            <label>
+                <input id="open" type="radio" name="filter" value="open">Abertos
+            </label>
+            <label>
+                <input id="close" type="radio" name="filter" value="close">Fechados
+            </label>
+        </form>
+    </div>`;
 }

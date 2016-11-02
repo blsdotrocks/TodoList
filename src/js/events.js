@@ -22,4 +22,26 @@ export function registerEventHandlers() {
         const id = Number.parseInt(event.target.getAttribute('data-id'), 10);
         todos.dispatch(toggleTodoState(id));
     });
+
+    listen('click', '#all', event => {
+        let item = document.querySelectorAll('.todo__item');
+        for(let i in item) {
+            item[i].classList.remove('close');
+        }
+    });
+
+    listen('click', '#close', event => {
+        let item = document.querySelectorAll('.todo__item--open');
+        for(let i in item) {
+            item[i].classList.add('close');
+        }
+    });
+
+    listen('click', '#open', event => {
+        let item = document.querySelectorAll('.todo__item--done');
+        for(let i in item) {
+            item[i].classList.add('close');
+        }
+    })
+
 }

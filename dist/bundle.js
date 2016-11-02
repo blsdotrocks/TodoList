@@ -8230,7 +8230,7 @@
 
 
 	// module
-	exports.push([module.id, "html, body, .todo {\n    margin: 0;\n    padding: 0;\n}\n\n.todo {\n    list-style-type: none;\n}\n\n.todo__input, .todo__item {\n    margin: 10px;\n}\n\n.todo__item--done {\n    text-decoration: line-through;\n}\n\n#addTodo {\n    margin-left: 10px;\n}\n", ""]);
+	exports.push([module.id, "html, body, .todo {\n    margin: 0;\n    padding: 0;\n}\n\n.todo {\n    list-style-type: none;\n}\n\n.todo__input, .todo__item {\n    margin: 10px;\n}\n\n.todo__item--done {\n    text-decoration: line-through;\n}\n\n#addTodo {\n    margin-left: 10px;\n}\n\n.close {\n    display: none;\n}\n", ""]);
 
 	// exports
 
@@ -8574,7 +8574,7 @@
 	    }, {
 	        id: 2,
 	        text: 'Filter todos by status',
-	        done: false
+	        done: true
 	    }, {
 	        id: 3,
 	        text: 'Filter todos by text',
@@ -9550,6 +9550,8 @@
 	function renderApp(input, todoList) {
 	    if ((0, _feature.isEnabled)('renderBottom')) {
 	        return renderAddTodoAtBottom(input, todoList);
+	    }if ((0, _feature.isEnabled)('filter')) {
+	        return renderAddFilter(input, todoList);
 	    } else {
 	        return renderAddTodoAtTop(input, todoList);
 	    }
@@ -9564,7 +9566,7 @@
 	}
 
 	function renderInput() {
-	    return '<div class="todo__input"><input type="text" id="todoInput"><button id="addTodo">Add</button></div>';
+	    return '<div class="todo__input"><input type="text" id="todoInput" autofocus><button id="addTodo">Add</button></div>';
 	}
 
 	function renderTodos(todoItems) {
@@ -9574,6 +9576,10 @@
 	function renderTodoItem(todo) {
 	    var todoClass = 'todo__item todo__item--' + (todo.done ? 'done' : 'open');
 	    return '<li class="' + todoClass + '">\n        <input class="js_toggle_todo" type="checkbox" data-id="' + todo.id + '"' + (todo.done ? ' checked' : '') + '>\n        ' + todo.text + '\n    </li>';
+	}
+
+	function renderAddFilter(input, todoList) {
+	    return '<div id="app">\n        ' + todoList + '\n        <form>\n            <label>\n                <input id="all" type="radio" name="filter" value="all" checked>Todos\n            </label>\n            <label>\n                <input id="open" type="radio" name="filter" value="open">Abertos\n            </label>\n            <label>\n                <input id="close" type="radio" name="filter" value="close">Fechados\n            </label>\n        </form>\n    </div>';
 		}
 
 /***/ },
@@ -9615,6 +9621,15 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function registerEventHandlers() {
+	    (0, _events.listen)('keypress', '#todoInput', function (event) {
+	        var key = event.which || event.keyCode;
+	        if (key == '13') {
+	            _state.todos.dispatch((0, _actions.addTodo)(todoInput.value));
+	            todoInput.focus();
+	            return false;
+	        }
+	    });
+
 	    (0, _events.listen)('click', '#addTodo', function (event) {
 	        var todoInput = document.getElementById('todoInput');
 	        _state.todos.dispatch((0, _actions.addTodo)(todoInput.value));
@@ -9625,7 +9640,28 @@
 	        var id = (0, _parseInt2.default)(event.target.getAttribute('data-id'), 10);
 	        _state.todos.dispatch((0, _actions.toggleTodoState)(id));
 	    });
-	}
+
+	    (0, _events.listen)('click', '#all', function (event) {
+	        var item = document.querySelectorAll('.todo__item');
+	        for (var i in item) {
+	            item[i].classList.remove('close');
+	        }
+	    });
+
+	    (0, _events.listen)('click', '#close', function (event) {
+	        var item = document.querySelectorAll('.todo__item--open');
+	        for (var i in item) {
+	            item[i].classList.add('close');
+	        }
+	    });
+
+	    (0, _events.listen)('click', '#open', function (event) {
+	        var item = document.querySelectorAll('.todo__item--done');
+	        for (var i in item) {
+	            item[i].classList.add('close');
+	        }
+	    });
+		}
 
 /***/ },
 /* 361 */

@@ -15,7 +15,7 @@ const initialState = {
         {
             id: 2,
             text: 'Filter todos by status',
-            done: false
+            done: true
         },
         {
             id: 3,
