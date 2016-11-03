@@ -9552,6 +9552,8 @@
 	        return renderAddTodoAtBottom(input, todoList);
 	    } else if ((0, _feature.isEnabled)('filter')) {
 	        return renderAddFilter(input, todoList);
+	    } else if ((0, _feature.isEnabled)('filterTop')) {
+	        return renderAddFilterTop(input, todoList);
 	    } else {
 	        return renderAddTodoAtTop(input, todoList);
 	    }
@@ -9580,6 +9582,10 @@
 
 	function renderAddFilter(input, todoList) {
 	    return '<div id="app">\n        ' + todoList + '\n        <form>\n            <label>\n                <input id="all" type="radio" name="filter" value="all" checked>Todos\n            </label>\n            <label>\n                <input id="open" type="radio" name="filter" value="open">Abertos\n            </label>\n            <label>\n                <input id="close" type="radio" name="filter" value="close">Fechados\n            </label>\n        </form>\n    </div>';
+	}
+
+	function renderAddFilterTop(input, todoList) {
+	    return '<div id="app">\n        <form>\n            <label>\n                <input id="all" type="radio" name="filter" value="all" checked>Todos\n            </label>\n            <label>\n                <input id="open" type="radio" name="filter" value="open">Abertos\n            </label>\n            <label>\n                <input id="close" type="radio" name="filter" value="close">Fechados\n            </label>\n        </form>\n        ' + todoList + '\n    </div>' + renderInput();
 		}
 
 /***/ },

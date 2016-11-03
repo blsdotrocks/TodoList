@@ -48,19 +48,23 @@ function renderTodoItem(todo) {
     </li>`;
 }
 
+function getFilter(input, todoList) {
+    return `<form>
+        <label>
+            <input id="all" type="radio" name="filter" value="all" checked>Todos
+        </label>
+        <label>
+            <input id="open" type="radio" name="filter" value="open">Abertos
+        </label>
+        <label>
+            <input id="close" type="radio" name="filter" value="close">Fechados
+        </label>
+    </form>`
+}
+
 function renderAddFilter(input, todoList) {
     return `<div id="app">
-        ${todoList}
-        <form>
-            <label>
-                <input id="all" type="radio" name="filter" value="all" checked>Todos
-            </label>
-            <label>
-                <input id="open" type="radio" name="filter" value="open">Abertos
-            </label>
-            <label>
-                <input id="close" type="radio" name="filter" value="close">Fechados
-            </label>
-        </form>
-    </div>`;
+            ${todoList}`
+            + getFilter() +
+            `</div>`;
 }

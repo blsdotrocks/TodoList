@@ -31,17 +31,20 @@ export function registerEventHandlers() {
     });
 
     listen('click', '#close', event => {
-        let item = document.querySelectorAll('.todo__item--open');
-        for(let i in item) {
-            item[i].classList.add('close');
+        const closes = document.querySelectorAll('.todo__item--done');
+        const opens = document.querySelectorAll('.todo__item--open');
+        for(let i in (closes + opens)) {
+            closes[i].classList.remove('close');
+            opens[i].classList.add('close');
         }
     });
 
     listen('click', '#open', event => {
-        let item = document.querySelectorAll('.todo__item--done');
-        for(let i in item) {
-            item[i].classList.add('close');
+        const closes = document.querySelectorAll('.todo__item--done');
+        const opens = document.querySelectorAll('.todo__item--open');
+        for(let i in (closes + opens)) {
+            closes[i].classList.add('close');
+            opens[i].classList.remove('close');
         }
     })
-
 }
