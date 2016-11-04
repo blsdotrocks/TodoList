@@ -12,6 +12,7 @@ module.exports = {
             {
                 loader: 'babel',
                 test: /\.js$/,
+                exclude: /node_modules/,
                 include: [path.resolve(__dirname, 'src', 'js')],
                 query: {
                     plugins: ['transform-runtime'],

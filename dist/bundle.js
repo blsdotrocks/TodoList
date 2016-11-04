@@ -8227,10 +8227,11 @@
 
 	exports = module.exports = __webpack_require__(301)();
 	// imports
-
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);", ""]);
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/icon?family=Material+Icons);", ""]);
 
 	// module
-	exports.push([module.id, "html, body, .todo {\n    margin: 0;\n    padding: 0;\n}\n\n.todo {\n    list-style-type: none;\n}\n\n.todo__input, .todo__item {\n    margin: 10px;\n}\n\n.todo__item--done {\n    text-decoration: line-through;\n}\n\n#addTodo {\n    margin-left: 10px;\n}\n\n.close {\n    display: none;\n}\n", ""]);
+	exports.push([module.id, "*, *:after, *:before {\n    box-sizing: border-box;\n}\n\nhtml, body, .todo {\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    font-size: 100%;\n    width: auto;\n    font-family: 'Droid Serif', serif;\n}\n\n#app {\n    width: 100%;\n}\n\n.todo {\n    list-style-type: none;\n}\n\n.todo--title {\n    font-weight: bold;\n    width: 100%;\n    text-align: center;\n    font-size: 2rem;\n    margin: 5rem 0;\n}\n\n.todo__input, .todo__item {\n    margin: 10px;\n    width: 100%;\n    font-size: 1.3rem;\n}\n\n.todo__item:hover {\n    cursor: default;\n    background-color: #F2F2F2;\n}\n\n#todoInput {\n    width: 90%;\n}\n\ninput[type=text] {\n    border: none;\n    border-bottom: 1px solid #A9A9BB;\n    font-size: 1.3rem;\n}\n\ninput[type=text]:focus {\n    outline: none;\n}\n\n.filter {\n    text-align: center;\n    margin: 5rem 1rem 5rem 0;\n}\n\n.filter:last-child {\n    margin-right: 0;\n}\n\nspan {\n    color: #000;\n}\n\n.todo__item--done {\n    text-decoration: line-through;\n    color: #B1EB22;\n    bottom: 110px;\n}\n\n#addTodo {\n    margin-left: -30px;\n    border: none;\n    background: none\n}\n\ninput[type=radio] {\n    width: 19px;\n    height: 19px;\n    cursor: pointer;\n}\n\n.close {\n    display: none;\n}\n\n.material-icons {\n    color: #A9A9BB;\n    cursor: pointer;\n}\n", ""]);
 
 	// exports
 
@@ -9548,11 +9549,11 @@
 	}
 
 	function renderApp(input, todoList) {
-	    if ((0, _feature.isEnabled)('renderBottom')) {
+	    if ((0, _feature.isEnabled)('renderBottom') && !(0, _feature.isEnabled)('filter')) {
 	        return renderAddTodoAtBottom(input, todoList);
-	    } else if ((0, _feature.isEnabled)('filter')) {
+	    } else if ((0, _feature.isEnabled)('filter') && !(0, _feature.isEnabled)('renderBottom')) {
 	        return renderAddFilter(input, todoList);
-	    } else if ((0, _feature.isEnabled)('filterTop')) {
+	    } else if ((0, _feature.isEnabled)('filter') && (0, _feature.isEnabled)('renderBottom') && (0, _feature.isEnabled)('filterTop')) {
 	        return renderAddFilterTop(input, todoList);
 	    } else {
 	        return renderAddTodoAtTop(input, todoList);
@@ -9568,7 +9569,7 @@
 	}
 
 	function renderInput() {
-	    return '<div class="todo__input"><input type="text" id="todoInput" autofocus><button id="addTodo">Add</button></div>';
+	    return renderTodoTitle() + '<div class="todo__input"><input type="text" id="todoInput" autofocus placeholder="Add a task"><button id="addTodo"><i class="material-icons">add_circle_outline</i></button></div>';
 	}
 
 	function renderTodos(todoItems) {
@@ -9577,15 +9578,23 @@
 
 	function renderTodoItem(todo) {
 	    var todoClass = 'todo__item todo__item--' + (todo.done ? 'done' : 'open');
-	    return '<li class="' + todoClass + '">\n        <input class="js_toggle_todo" type="checkbox" data-id="' + todo.id + '"' + (todo.done ? ' checked' : '') + '>\n        ' + todo.text + '\n    </li>';
+	    return '<li class="' + todoClass + '">\n        <input class="js_toggle_todo" type="radio" data-id="' + todo.id + '"' + (todo.done ? ' checked' : '') + '>\n        <span>' + todo.text + '</span>\n    </li>';
+	}
+
+	function renderTodoTitle() {
+	    return '<h1 class="todo--title">TodoList</h1>';
+	}
+
+	function getFilter(input, todoList) {
+	    return '<form class="filter">\n        <label>\n            <input id="all" type="radio" name="filter" value="all" checked>Todos\n        </label>\n        <label>\n            <input id="open" type="radio" name="filter" value="open">Abertos\n        </label>\n        <label>\n            <input id="close" type="radio" name="filter" value="close">Fechados\n        </label>\n    </form>';
 	}
 
 	function renderAddFilter(input, todoList) {
-	    return '<div id="app">\n        ' + todoList + '\n        <form>\n            <label>\n                <input id="all" type="radio" name="filter" value="all" checked>Todos\n            </label>\n            <label>\n                <input id="open" type="radio" name="filter" value="open">Abertos\n            </label>\n            <label>\n                <input id="close" type="radio" name="filter" value="close">Fechados\n            </label>\n        </form>\n    </div>';
+	    return '<div id="app">\n            ' + todoList + getFilter() + '</div>';
 	}
 
 	function renderAddFilterTop(input, todoList) {
-	    return '<div id="app">\n        <form>\n            <label>\n                <input id="all" type="radio" name="filter" value="all" checked>Todos\n            </label>\n            <label>\n                <input id="open" type="radio" name="filter" value="open">Abertos\n            </label>\n            <label>\n                <input id="close" type="radio" name="filter" value="close">Fechados\n            </label>\n        </form>\n        ' + todoList + '\n    </div>' + renderInput();
+	    return '<div id="app">' + getFilter() + (todoList + ' </div>') + renderInput();
 		}
 
 /***/ },
@@ -9655,19 +9664,23 @@
 	    });
 
 	    (0, _events.listen)('click', '#close', function (event) {
-	        var item = document.querySelectorAll('.todo__item--open');
-	        for (var i in item) {
-	            item[i].classList.add('close');
+	        var closes = document.querySelectorAll('.todo__item--done');
+	        var opens = document.querySelectorAll('.todo__item--open');
+	        for (var i in closes + opens) {
+	            closes[i].classList.remove('close');
+	            opens[i].classList.add('close');
 	        }
 	    });
 
 	    (0, _events.listen)('click', '#open', function (event) {
-	        var item = document.querySelectorAll('.todo__item--done');
-	        for (var i in item) {
-	            item[i].classList.add('close');
+	        var closes = document.querySelectorAll('.todo__item--done');
+	        var opens = document.querySelectorAll('.todo__item--open');
+	        for (var i in closes + opens) {
+	            closes[i].classList.add('close');
+	            opens[i].classList.remove('close');
 	        }
 	    });
-		}
+	}
 
 /***/ },
 /* 361 */

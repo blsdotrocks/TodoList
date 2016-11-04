@@ -35,7 +35,7 @@ function renderAddTodoAtBottom(input, todoList) {
 }
 
 function renderInput() {
-    return `<div class="todo__input"><input type="text" id="todoInput" autofocus><button id="addTodo">Add</button></div>`;
+    return renderTodoTitle() + `<div class="todo__input"><input type="text" id="todoInput" autofocus placeholder="Add a task"><button id="addTodo"><i class="material-icons">add_circle_outline</i></button></div>`;
 }
 
 function renderTodos(todoItems) {
@@ -45,13 +45,17 @@ function renderTodos(todoItems) {
 function renderTodoItem(todo) {
     const todoClass = `todo__item todo__item--${todo.done ? 'done' : 'open'}`;
     return `<li class="${todoClass}">
-        <input class="js_toggle_todo" type="checkbox" data-id="${todo.id}"${todo.done ? ' checked' : ''}>
-        ${todo.text}
+        <input class="js_toggle_todo" type="radio" data-id="${todo.id}"${todo.done ? ' checked' : ''}>
+        <span>${todo.text}</span>
     </li>`;
 }
 
+function renderTodoTitle() {
+    return `<h1 class="todo--title">TodoList</h1>`;
+}
+
 function getFilter(input, todoList) {
-    return `<form>
+    return `<form class="filter">
         <label>
             <input id="all" type="radio" name="filter" value="all" checked>Todos
         </label>
